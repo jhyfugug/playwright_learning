@@ -39,10 +39,26 @@ def test_get_by_label(page: Page):
     page.get_by_label("输入你想输入的任何文字").fill("123456")
 
 
-def test_get_by_placeholder(page:Page):
+def test_get_by_placeholder(page: Page):
     page.goto("/demo/input", wait_until="networkidle")
     page.get_by_placeholder("不用管我,我是placeholder").fill("123456")
 
-def test_get_by_title(page:Page):
+
+def test_get_by_title(page: Page):
     page.goto("/demo/image", wait_until="networkidle")
     expect(page.get_by_title("这是一个title")).to_be_visible()
+
+
+def test_pw_new_page(page: Page):
+    page.goto("/demo/link", wait_until="networkidle")
+    page.get_by_text("本页跳转到百度").click()
+    expect(page.get_by_text("百度一下", exact=True)).to_be_visible()
+
+    # 跳转到新页面，使用 with 来定义操作的起始和截止。是固定用法
+    page.goto("/demo/link", wait_until="networkidle")
+    with page.expect_popup() as new_page:
+        page.get_by_text("新页面跳转到淘宝").click()
+
+    page_new = new_page.value
+    expect(page_new.locator(".search-button").is_visible())
+
