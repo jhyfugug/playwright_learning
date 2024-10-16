@@ -62,3 +62,5 @@ def test_pw_new_page(page: Page):
     page_new = new_page.value
     expect(page_new.locator(".search-button").is_visible())
 
+def test():
+    pass
